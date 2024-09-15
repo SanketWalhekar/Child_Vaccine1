@@ -1,0 +1,43 @@
+/* src/components/ParentInfo.css */
+.parent-info {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.parent-info h2 {
+  text-align: center;
+}
+
+.parent-info form {
+  display: flex;
+  flex-direction: column;
+}
+
+.parent-info label {
+  margin-bottom: 10px;
+}
+
+.parent-info input,
+.parent-info select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+}
+
+.parent-info button {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.parent-info button:hover {
+  background-color: #45a049;
+}

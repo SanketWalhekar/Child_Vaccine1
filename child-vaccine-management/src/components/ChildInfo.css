@@ -1,0 +1,43 @@
+/* src/components/ChildInfo.css */
+.child-info {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.child-info h2 {
+  text-align: center;
+}
+
+.child-info form {
+  display: flex;
+  flex-direction: column;
+}
+
+.child-info label {
+  margin-bottom: 10px;
+}
+
+.child-info input,
+.child-info select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+}
+
+.child-info button {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.child-info button:hover {
+  background-color: #45a049;
+}
