@@ -87,8 +87,7 @@ const ChildInfo = ({ prevStep, nextStep, handleChange, formData, setFormData }) 
             name="gender"
             value={formData.gender}
             onChange={handleChange}
-            required
-          >
+            required >
             <option value="">Select</option>
             <option value="male">Male</option>
             <option value="female">Female</option>

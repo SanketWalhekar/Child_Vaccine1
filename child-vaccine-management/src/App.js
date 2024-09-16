@@ -53,7 +53,7 @@ const App = () => {
         const response = await fetch('http://localhost:8080/api/register', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type':'application/json',
           },
           body: JSON.stringify(formData),
         });
@@ -64,10 +64,10 @@ const App = () => {
         }
 
         const result = await response.json();
-        setSuccessMessage('Form submitted successfully!');
+         setSuccessMessage('Form submitted successfully!');
         setErrorMessage('');
         console.log('Server response:', result);
-        setStep(step + 1); // Proceed to the next step after successful registration
+        setStep(step + 1);
       } catch (error) {
         setErrorMessage(error.message || 'Something went wrong');
         console.error('Fetch error:', error);
@@ -137,7 +137,7 @@ const App = () => {
             <Route path="/recommendation" element={<Recommendation />} />
             <Route path="/profile" element={isAuthenticated && userId ? <Profile userId={userId} /> : <Navigate to="/login" />} />
             <Route path="/landing" element={isAuthenticated ? <LandingPage /> : <Navigate to="/login" />} />
-          </Routes>
+           </Routes>
         </main>
         <Footer />
       </div>
