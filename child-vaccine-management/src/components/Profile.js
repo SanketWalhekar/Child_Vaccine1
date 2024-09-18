@@ -114,12 +114,7 @@ const Profile = ({ userId }) => {
           <p><strong>Email:</strong> {userData.email}</p>
           <p><strong>Address:</strong> {userData.houseNumber}, {userData.street}, {userData.city}, {userData.state}, {userData.postalCode}, {userData.country}</p>
           <div className="child-details">
-          <h3>Child 1</h3>
-          <p><strong>Child Name:</strong> {userData.childName}</p>
-          <p><strong>Date of Birth:</strong> {new Date(userData.dateOfBirth).toLocaleDateString()}</p>
-          <p><strong>Gender:</strong> {userData.gender}</p>
-          <p><strong>Age:</strong> {userData.age}</p>
-          <p><strong>Medical History:</strong> {userData.medicalHistory}</p>
+        
           </div>
 
 

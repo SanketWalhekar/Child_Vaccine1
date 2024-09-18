@@ -23,23 +23,42 @@ app.use(cors());
 // API endpoint to handle form data submission
 app.post('/api/register', async (req, res) => {
   try {
-    const formData = new FormData(req.body);
+    const { parentName, contactNumber, email, houseNumber, street, city, state, postalCode, country, password } = req.body;
+
+    // Save the parent data in FormData collection
+    const formData = new FormData({
+      parentName,
+      contactNumber,
+      email,
+      houseNumber,
+      street,
+      city,
+      state,
+      postalCode,
+      country,
+    });
     await formData.save();
 
-    // Create and save SecureData
+    // Save the login credentials in SecureData collection
+    const hashedPassword = await bcrypt.hash(password, 10); // Hash the password
     const secureData = new SecureData({
       uniqueId: formData.uniqueId,
-      contactNumber: req.body.contactNumber,
-      password: req.body.password 
+      contactNumber: contactNumber,
+      password: hashedPassword,
     });
     await secureData.save();
 
-    res.status(200).json({ message: 'Form data received and saved successfully!', uniqueId: formData.uniqueId });
+    res.status(200).json({ message: 'Registration successful!', uniqueId: formData.uniqueId });
   } catch (error) {
-    console.error('Error saving form data:', error);
-    res.status(500).json({ message: 'Error saving form data', error: error.message });
+    console.error('Error saving registration data:', error);
+    res.status(500).json({ message: 'Error saving registration data', error: error.message });
   }
 });
+
+
+// API endpoint for login
+// API endpoint for login
+// Import bcrypt
 
 // API endpoint for login
 app.post('/api/login', async (req, res) => {
@@ -51,6 +70,7 @@ app.post('/api/login', async (req, res) => {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
+    // Compare the plaintext password with the hashed password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
@@ -62,6 +82,9 @@ app.post('/api/login', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+
+
+
 
 // API endpoint to get user profile
 app.get('/api/profile/:userId', async (req, res) => {
@@ -113,4 +136,3 @@ app.post('/api/profile/:userId/addChild', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
-//comment
