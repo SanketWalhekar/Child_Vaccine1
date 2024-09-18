@@ -43,3 +43,4 @@ const Register = ({ formData, handleChange, nextStep, prevStep }) => {
 };
 
 export default Register;
+//register
