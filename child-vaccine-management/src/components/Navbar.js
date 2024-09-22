@@ -11,7 +11,9 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
         </Link>
       </div>
       <ul className="navbar-links">
-        <li><Link to="/book">Book Appointment</Link></li>
+        <li><Link to="/bookapp">Book Appointment</Link></li>
+
+        {/* <li><Link to="/book">Book Appointment</Link></li> */}
         <li><Link to="/healthcare">Healthcare</Link></li>
         <li><Link to="/recommendation">Recommendation</Link></li>
         {isAuthenticated ? (

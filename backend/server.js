@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const FormData = require('./models/FormData');
 const SecureData = require('./models/SecureData');
 const bcrypt = require('bcryptjs');
+const axios = require('axios');
 
 const app = express();
 const PORT = 8080;
@@ -23,24 +24,19 @@ app.use(cors());
 // API endpoint to handle form data submission
 app.post('/api/register', async (req, res) => {
   try {
-    const { parentName, contactNumber, email, houseNumber, street, city, state, postalCode, country, password } = req.body;
+    const { parentName, contactNumber, email, address, password } = req.body;
 
     // Save the parent data in FormData collection
     const formData = new FormData({
       parentName,
       contactNumber,
       email,
-      houseNumber,
-      street,
-      city,
-      state,
-      postalCode,
-      country,
+      address,
     });
     await formData.save();
 
-    // Save the login credentials in SecureData collection
-    const hashedPassword = await bcrypt.hash(password, 10); // Hash the password
+    // Hash the password and save the login credentials in SecureData collection
+    const hashedPassword = await bcrypt.hash(password, 10);
     const secureData = new SecureData({
       uniqueId: formData.uniqueId,
       contactNumber: contactNumber,
@@ -54,6 +50,7 @@ app.post('/api/register', async (req, res) => {
     res.status(500).json({ message: 'Error saving registration data', error: error.message });
   }
 });
+
 
 
 // API endpoint for login
@@ -130,6 +127,28 @@ app.post('/api/profile/:userId/addChild', async (req, res) => {
   } catch (error) {
     console.error('Error adding child:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
+app.get('/api/geocode', async (req, res) => {
+  const { address } = req.query;
+  const apiKey = 'AIzaSyB739by2F55lwunVBKNPpmFm72MqwpdaYU';
+  try {
+    const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${apiKey}`);
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching geocode data' });
+  }
+});
+
+app.get('/api/nearby-hospitals', async (req, res) => {
+  const { lat, lng } = req.query;
+  const apiKey = 'AIzaSyB739by2F55lwunVBKNPpmFm72MqwpdaYU';
+  try {
+    const response = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=5000&type=hospital&key=${apiKey}`);
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching nearby hospitals' });
   }
 });
 

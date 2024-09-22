@@ -37,7 +37,7 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="home-section">
+      <section className="hogit remote set-url originme-section">
         <h2>Our Mission</h2>
         <div className="home-content">
           <p>
@@ -56,3 +56,4 @@ const Home = () => {
 };
 
 export default Home;
+// AIzaSyDM3yZ9-EF6aOYtfWZ2veZPrm8rB887aMk

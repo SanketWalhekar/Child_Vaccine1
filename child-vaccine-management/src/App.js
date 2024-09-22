@@ -14,6 +14,7 @@ import ChildInfo from './components/ChildInfo';
 import Profile from './components/Profile';
 import LandingPage from './components/LandingPage'; 
 import Register from './components/Register';
+import GoogleMapsNearbyPlaces from './components/GoogleMapsNearbyPlaces';
 
 
 const App = () => {
@@ -48,8 +49,10 @@ const App = () => {
             <Route path="/view" element={isAuthenticated ? <ViewRecords /> : <Navigate to="/login" />} />
             <Route path="/login" element={<Login onLogin={handleLogin} />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/bookapp" element={<GoogleMapsNearbyPlaces />} />
 
-            <Route path="/book" element={isAuthenticated ? <BookAppointment /> : <Navigate to="/login" />} />
+
+            {/* <Route path="/book" element={<BookAppointment />}/> */}
             <Route path="/healthcare" element={isAuthenticated ? <Healthcare /> : <Navigate to="/login" />} />
             <Route path="/recommendation" element={<Recommendation />} />
             <Route path="/profile" element={isAuthenticated && userId ? <Profile userId={userId} /> : <Navigate to="/login" />} />

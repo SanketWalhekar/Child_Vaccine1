@@ -1,73 +1,93 @@
-/* Profile Container */
+/* Container for the profile */
 .profile-container {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
   background-color: #f7f9fc;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Profile Details */
-.profile-details {
-  margin-bottom: 20px;
-}
-
-.profile-details p {
-  font-size: 16px;
+/* Heading for the profile section */
+.profile-container h2 {
+  font-size: 28px;
   color: #333;
-  margin: 8px 0;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
-.profile-details h3 {
-  margin-top: 30px;
-  margin-bottom: 10px;
-  font-size: 20px;
-  color: #0056b3;
-}
-
-/* Child Details */
-.child-details {
-  background-color: #e7efff;
+/* Styling for user details */
+.profile-details {
   padding: 15px;
-  border-radius: 5px;
+  background-color: #fff;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #e1e4e8;
+}
+
+/* Styling for child details */
+.child-details {
+  padding: 10px;
+  background-color: #f0f0f5;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.child-details h3 {
+  font-size: 20px;
+  color: #444;
   margin-bottom: 10px;
 }
 
 .child-details p {
-  margin: 6px 0;
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 5px;
 }
 
-/* Buttons */
+/* Button to add a child */
 button {
-  padding: 10px 15px;
-  font-size: 16px;
-  color: white;
-  background-color: #0056b3;
+  background-color: #007bff;
+  color: #fff;
   border: none;
+  padding: 10px 15px;
   border-radius: 5px;
   cursor: pointer;
-  margin-right: 10px;
-  transition: background-color 0.3s ease;
+  font-size: 16px;
+  margin-top: 10px;
 }
 
 button:hover {
-  background-color: #004494;
+  background-color: #0056b3;
 }
 
-/* Add Child Form */
+button:disabled {
+  background-color: #d6d6d6;
+}
+
+/* Form for adding a new child */
 .add-child-form {
-  margin-top: 20px;
-  padding: 20px;
   background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  border: 1px solid #e1e4e8;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
 }
 
+/* Form headings */
+.add-child-form h3 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Form labels */
 .add-child-form label {
   display: block;
   margin-bottom: 10px;
-  font-weight: bold;
+  font-size: 16px;
+  color: #333;
 }
 
 .add-child-form input,
@@ -75,28 +95,48 @@ button:hover {
 .add-child-form textarea {
   width: 100%;
   padding: 8px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
   font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 15px;
 }
 
-.add-child-form textarea {
-  resize: vertical;
-}
-
-/* Success Message */
+/* Success message styling */
 .success-message {
-  color: green;
-  font-weight: bold;
-  margin-top: 20px;
+  background-color: #d4edda;
+  color: #155724;
+  padding: 15px;
+  border-radius: 5px;
+  border: 1px solid #c3e6cb;
+  margin-top: 10px;
   text-align: center;
 }
 
-/* Error Message */
+/* Error message styling */
 .error-message {
-  color: red;
-  font-weight: bold;
-  margin-top: 20px;
+  color: #d9534f;
+  background-color: #f2dede;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ebccd1;
+  margin-top: 10px;
   text-align: center;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 600px) {
+  .profile-container {
+    padding: 10px;
+  }
+
+  .profile-details,
+  .child-details,
+  .add-child-form {
+    padding: 10px;
+  }
+
+  button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
 }

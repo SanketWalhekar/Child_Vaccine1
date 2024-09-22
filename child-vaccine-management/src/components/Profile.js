@@ -15,53 +15,68 @@ const Profile = ({ userId }) => {
   const [addingChild, setAddingChild] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
 
+  // Function to fetch user data
+  const fetchUserData = async () => {
+    if (!userId) {
+      setError('User ID is missing');
+      setLoading(false);
+      return;
+    }
+
+    try {
+      console.log('Fetching user data for ID:', userId);
+      const response = await fetch(`http://localhost:8080/api/profile/${userId}`);
+      if (!response.ok) {
+        throw new Error('User not found');
+      }
+      const data = await response.json();
+      setUserData(data);
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setError('An error occurred while fetching user data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchUserData = async () => {
-      if (!userId) {
-        setError('User ID is missing');
-        setLoading(false);
-        return;
-      }
-
-      try {
-        console.log('Fetching user data for ID:', userId);
-
-        const response = await fetch(`http://localhost:8080/api/profile/${userId}`);
-        if (!response.ok) {
-          throw new Error('User not found');
-        }
-        const data = await response.json();
-        setUserData(data);
-      } catch (error) {
-        console.error('Fetch error:', error);
-        setError('An error occurred while fetching user data');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUserData();
+    fetchUserData(); // Fetch user data on component mount
   }, [userId]);
 
   const calculateAge = (dob) => {
     const birthDate = new Date(dob);
     const today = new Date();
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const monthDiff = today.getMonth() - birthDate.getMonth();
-
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
+  
+    // Calculate the difference in years
+    let ageYears = today.getFullYear() - birthDate.getFullYear();
+  
+    // Calculate the difference in months
+    let ageMonths = today.getMonth() - birthDate.getMonth();
+  
+    // Adjust for cases where the birth month hasn't yet occurred this year
+    if (ageMonths < 0 || (ageMonths === 0 && today.getDate() < birthDate.getDate())) {
+      ageYears--; // Subtract a year if the current month/day is before the birth month/day
+      ageMonths += 12; // Add 12 months to adjust the negative month difference
     }
-
-    return age;
+  
+    // If the day of the birth month hasn't passed yet in the current month, subtract one month
+    if (today.getDate() < birthDate.getDate()) {
+      ageMonths--;
+    }
+  
+    return { years: ageYears, months: ageMonths };
   };
-
+  
   const handleChildInputChange = (e) => {
     const { name, value } = e.target;
-
+  
     if (name === 'dateOfBirth') {
-      const age = calculateAge(value);
-      setNewChild({ ...newChild, dateOfBirth: value, age });
+      const { years, months } = calculateAge(value);
+      // Store the age as a single string like "X years, Y months"
+      const ageString = `${years} years, ${months} months`;
+  
+      // Update the newChild object with the combined ageString
+      setNewChild({ ...newChild, dateOfBirth: value, age: ageString });
     } else {
       setNewChild({ ...newChild, [name]: value });
     }
@@ -88,10 +103,13 @@ const Profile = ({ userId }) => {
       }
 
       const updatedUser = await response.json();
-      setUserData(updatedUser);
+      setUserData(updatedUser); // Update with new data
       setAddingChild(false);
       setNewChild({ childName: '', dateOfBirth: '', gender: 'male', medicalHistory: '', age: '' });
       setSuccessMessage('Child added successfully!');
+      
+      // Re-fetch user data to reflect the new child
+      fetchUserData(); // <<<< Add this line to refresh the data from the backend
       
       // Hide the success message after 3 seconds
       setTimeout(() => setSuccessMessage(''), 3000);
@@ -112,16 +130,12 @@ const Profile = ({ userId }) => {
           <p><strong>Parent Name:</strong> {userData.parentName}</p>
           <p><strong>Contact Number:</strong> {userData.contactNumber}</p>
           <p><strong>Email:</strong> {userData.email}</p>
-          <p><strong>Address:</strong> {userData.houseNumber}, {userData.street}, {userData.city}, {userData.state}, {userData.postalCode}, {userData.country}</p>
-          <div className="child-details">
-        
-          </div>
-
-
+          <p><strong>Address:</strong> {userData.address}</p>
+          
           {userData.children && userData.children.length > 0 ? (
             userData.children.map((child, index) => (
               <div key={index} className="child-details">
-                <h3>Child {index + 2}</h3>
+                <h3>Child {index + 1}</h3> {/* Fixed child numbering */}
                 <p><strong>Child Name:</strong> {child.childName}</p>
                 <p><strong>Date of Birth:</strong> {new Date(child.dateOfBirth).toLocaleDateString()}</p>
                 <p><strong>Gender:</strong> {child.gender}</p>
@@ -205,5 +219,3 @@ const Profile = ({ userId }) => {
 };
 
 export default Profile;
-
-//comment 

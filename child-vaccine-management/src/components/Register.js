@@ -6,12 +6,7 @@ const Register = () => {
     parentName: '',
     contactNumber: '',
     email: '',
-    houseNumber: '',
-    street: '',
-    city: '',
-    state: '',
-    postalCode: '',
-    country: '',
+    address: '',
     password: '',
     confirmPassword: '',
   });
@@ -28,7 +23,6 @@ const Register = () => {
     
     // Regular expressions for validation
     const phonePattern = /^[0-9]{10}$/;
-    const postalPattern = /^[0-9]{5}$/; // Adjust this based on your postal code format
     const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/; // Minimum 8 characters, at least one uppercase letter, one lowercase letter, and one number
     const namePattern = /^[A-Za-z\s]+$/; // Only letters and spaces
 
@@ -41,24 +35,10 @@ const Register = () => {
     if (!formData.email) newErrors.email = 'Email is required.';
     else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'A valid email address is required.';
 
-    if (!formData.houseNumber) newErrors.houseNumber = 'House Number is required.';
-    else if (formData.houseNumber.length < 1 || formData.houseNumber.length > 10) newErrors.houseNumber = 'House Number must be between 1 and 10 characters.';
-
-    if (!formData.street) newErrors.street = 'Street is required.';
-    else if (formData.street.length < 1 || formData.street.length > 50) newErrors.street = 'Street must be between 1 and 50 characters.';
-
-    if (!formData.city) newErrors.city = 'City is required.';
-    else if (formData.city.length < 1 || formData.city.length > 30) newErrors.city = 'City must be between 1 and 30 characters.';
-
-    if (!formData.state) newErrors.state = 'State is required.';
-    else if (formData.state.length < 1 || formData.state.length > 30) newErrors.state = 'State must be between 1 and 30 characters.';
-
-    if (!formData.postalCode) newErrors.postalCode = 'Postal Code is required.';
-
-    if (!formData.country) newErrors.country = 'Country is required.';
-    else if (formData.country.length < 1 || formData.country.length > 30) newErrors.country = 'Country must be between 1 and 30 characters.';
+    if (!formData.address) newErrors.address = 'Address is required.';
 
     if (!formData.password) newErrors.password = 'Password is required.';
+    // else if (!passwordPattern.test(formData.password)) newErrors.password = 'Password must be at least 8 characters long and contain an uppercase letter, a lowercase letter, and a number.';
 
     if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match.';
 
@@ -136,70 +116,15 @@ const Register = () => {
           {errors.email && <span className="error-message">{errors.email}</span>}
         </label>
         <label>
-          House Number:
+          Address:
           <input
             type="text"
-            name="houseNumber"
-            value={formData.houseNumber}
+            name="address"
+            value={formData.address}
             onChange={handleChange}
             required
           />
-          {errors.houseNumber && <span className="error-message">{errors.houseNumber}</span>}
-        </label>
-        <label>
-          Street:
-          <input
-            type="text"
-            name="street"
-            value={formData.street}
-            onChange={handleChange}
-            required
-          />
-          {errors.street && <span className="error-message">{errors.street}</span>}
-        </label>
-        <label>
-          City:
-          <input
-            type="text"
-            name="city"
-            value={formData.city}
-            onChange={handleChange}
-            required
-          />
-          {errors.city && <span className="error-message">{errors.city}</span>}
-        </label>
-        <label>
-          State:
-          <input
-            type="text"
-            name="state"
-            value={formData.state}
-            onChange={handleChange}
-            required
-          />
-          {errors.state && <span className="error-message">{errors.state}</span>}
-        </label>
-        <label>
-          Postal Code:
-          <input
-            type="text"
-            name="postalCode"
-            value={formData.postalCode}
-            onChange={handleChange}
-            required
-          />
-          {errors.postalCode && <span className="error-message">{errors.postalCode}</span>}
-        </label>
-        <label>
-          Country:
-          <input
-            type="text"
-            name="country"
-            value={formData.country}
-            onChange={handleChange}
-            required
-          />
-          {errors.country && <span className="error-message">{errors.country}</span>}
+          {errors.address && <span className="error-message">{errors.address}</span>}
         </label>
         <label>
           Password:

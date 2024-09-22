@@ -19,27 +19,7 @@ const formDataSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  houseNumber: {
-    type: String,
-    required: true,
-  },
-  street: {
-    type: String,
-    required: true,
-  },
-  city: {
-    type: String,
-    required: true,
-  },
-  state: {
-    type: String,
-    required: true,
-  },
-  postalCode: {
-    type: String,
-    required: true,
-  },
-  country: {
+  address: {
     type: String,
     required: true,
   },
@@ -48,7 +28,7 @@ const formDataSchema = new mongoose.Schema({
     dateOfBirth: Date,
     gender: String,
     medicalHistory: String,
-    age: Number,
+    age: String,
   }],
 });
 
