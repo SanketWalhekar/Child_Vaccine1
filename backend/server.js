@@ -4,6 +4,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const FormData = require('./models/FormData');
 const SecureData = require('./models/SecureData');
+const Appointment = require('./models/Appointment');
 const bcrypt = require('bcryptjs');
 const axios = require('axios');
 
@@ -101,7 +102,6 @@ app.get('/api/profile/:userId', async (req, res) => {
   }
 });
 
-// Add new child to an existing user
 app.post('/api/profile/:userId/addChild', async (req, res) => {
   const { userId } = req.params;
   const { childName, dateOfBirth, gender, medicalHistory, age } = req.body;
@@ -130,27 +130,31 @@ app.post('/api/profile/:userId/addChild', async (req, res) => {
   }
 });
 
-app.get('/api/geocode', async (req, res) => {
-  const { address } = req.query;
-  const apiKey = 'AIzaSyB739by2F55lwunVBKNPpmFm72MqwpdaYU';
+// Route to book an appointment
+app.post('/api/bookAppointment', async (req, res) => {
   try {
-    const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${apiKey}`);
-    res.json(response.data);
+    const { childName, age, hospital, address, phone, userId } = req.body;
+
+    // Create a new appointment
+    const newAppointment = new Appointment({
+      childName,
+      age,
+      hospital,
+      address,
+      phone,
+      userId,
+    });
+
+    // Save to the database
+    await newAppointment.save();
+    res.status(201).json({ message: 'Appointment booked successfully!', appointment: newAppointment });
   } catch (error) {
-    res.status(500).json({ error: 'Error fetching geocode data' });
+    console.error('Error booking appointment:', error);
+    res.status(500).json({ message: 'Failed to book appointment', error: error.message });
   }
 });
 
-app.get('/api/nearby-hospitals', async (req, res) => {
-  const { lat, lng } = req.query;
-  const apiKey = 'AIzaSyB739by2F55lwunVBKNPpmFm72MqwpdaYU';
-  try {
-    const response = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=5000&type=hospital&key=${apiKey}`);
-    res.json(response.data);
-  } catch (error) {
-    res.status(500).json({ error: 'Error fetching nearby hospitals' });
-  }
-});
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

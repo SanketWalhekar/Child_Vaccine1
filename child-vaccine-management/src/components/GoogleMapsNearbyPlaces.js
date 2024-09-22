@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
+
 import './GoogleMapsNearbyPlaces.css';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 // Load the Google Maps script
 const loadScript = (url) => {
@@ -11,7 +15,7 @@ const loadScript = (url) => {
 };
 
 // Main Component
-const GoogleMapsNearbyPlaces = () => {
+const GoogleMapsNearbyPlaces = ({userId}) => {
   const [map, setMap] = useState(null);
   const [markers, setMarkers] = useState([]);
   const [userLocationMarker, setUserLocationMarker] = useState(null);
@@ -21,6 +25,10 @@ const GoogleMapsNearbyPlaces = () => {
     name: '',
     address: '',
     phone: ''
+  });
+  const [formData, setFormData] = useState({
+    childName: '',
+    age: ''
   });
 
   useEffect(() => {
@@ -131,6 +139,7 @@ const GoogleMapsNearbyPlaces = () => {
     markers.forEach(marker => marker.setMap(null));
     setMarkers([]);
   };
+  console.log(userId);
 
   const displayPlaceDetails = (place, marker) => {
     const service = new window.google.maps.places.PlacesService(map);
@@ -145,14 +154,51 @@ const GoogleMapsNearbyPlaces = () => {
         infoWindow.setContent(placeDetails.name);
         infoWindow.open(map, marker);
       } else {
-        alert('Place details request failed due to ${status}');
+        alert(`Place details request failed due to ${status}`);
       }
     });
   };
 
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const appointmentData = {
+      childName: formData.childName,
+      age: formData.age,
+      hospital: placeDetails.name,
+      address: placeDetails.address,
+      phone: placeDetails.phone,
+      userId: userId // Replace with the actual user ID variable
+    };
+  
+    try {
+      const response = await fetch('http://localhost:8080/api/bookAppointment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(appointmentData),
+      });
+  
+      if (response.ok) {
+        const result = await response.json();
+        toast.success('Appointment successfully booked!'); // Show success toast
+        console.log('Appointment booked successfully:', result);
+      } else {
+        toast.error('Failed to book appointment.'); // Show error toast
+        console.error('Failed to book appointment:', response.statusText);
+      }
+    } catch (error) {
+      toast.error('Error during booking appointment.'); // Show error toast
+      console.error('Error during booking appointment:', error);
+    }
+  };
   return (
     <div>
-      <h1>Google Maps Nearby Places</h1>
+      <h1>Book Your Appointment</h1>
       <div id="map" style={{ height: '400px', width: '100%', border: '2px solid #ccc', borderRadius: '5px' }}></div>
       <button onClick={searchNearby}>Find Nearby Hospitals</button>
       <select id="search-range">
@@ -183,8 +229,36 @@ const GoogleMapsNearbyPlaces = () => {
           </tbody>
         </table>
       </div>
+
+      <form onSubmit={handleSubmit} className="appointment-form">
+        <h2>Book an Appointment</h2>
+        <label>
+          Child's Name:
+          <input
+            type="text"
+            name="childName"
+            value={formData.childName}
+            onChange={handleChange}
+            required
+          />
+        </label>
+        <label>
+          Age:
+          <input
+            type="number"
+            name="age"
+            value={formData.age}
+            onChange={handleChange}
+            required
+          />
+        </label>
+        <button type="submit">Book Appointment</button>
+      </form>
+      {/* Toast container */}
+      <ToastContainer />
     </div>
   );
 };
 
 export default GoogleMapsNearbyPlaces;
+
